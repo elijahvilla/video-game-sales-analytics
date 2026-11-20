@@ -1,17 +1,17 @@
 # Data Dictionary: `vgsales.db` (SQLite star schema)
 
-Grain of the fact table: **one row per game × region** (16,187 games × 4 regions = 64,748 rows).
+Grain of the fact table: **one row per game x region** (16,187 games x 4 regions = 64,748 rows).
 Sales are in **millions of units** (physical retail, as tracked by VGChartz).
 
 ## fact_sales
 | Column | Type | Description |
 |---|---|---|
-| game_key | INTEGER | FK → dim_game. One title on one platform |
-| platform_key | INTEGER | FK → dim_platform |
-| genre_key | INTEGER | FK → dim_genre |
-| publisher_key | INTEGER | FK → dim_publisher |
-| year_key | INTEGER | FK → dim_year (release year) |
-| region_key | INTEGER | FK → dim_region |
+| game_key | INTEGER | FK -> dim_game. One title on one platform |
+| platform_key | INTEGER | FK -> dim_platform |
+| genre_key | INTEGER | FK -> dim_genre |
+| publisher_key | INTEGER | FK -> dim_publisher |
+| year_key | INTEGER | FK -> dim_year (release year) |
+| region_key | INTEGER | FK -> dim_region |
 | sales_millions | REAL | Units sold in that region, in millions |
 
 ## dim_game

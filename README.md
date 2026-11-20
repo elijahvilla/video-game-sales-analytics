@@ -1,49 +1,57 @@
-# Video Game Sales Analytics & Forecasting
+# Video Game Sales Analytics
 
-An end-to-end analytics project on **16,187 video game releases (1980–2016)**:
-- a Python ETL into a **SQLite star schema**
-- five **SQL analyses** built on CTEs and window functions
-- a **scikit-learn** model that forecasts regional sales for new titles
+I've played games my whole life (Elden Ring is my favorite), and I wanted to answer some questions I've always had about the industry with real data. Which publishers own which regions? Do players in Japan really buy different games than players in the US? Can you predict how a new game will sell from basic facts like its platform and genre?
 
-## Key findings
-| Question | Answer |
-|---|---|
-| Who leads each region? | **Nintendo** is #1 in North America (18.9% of units), Europe (17.4%), and Japan (35.5%). **EA** leads the rest of the world (16.2%). |
-| How do tastes differ by region? | Japan buys **role-playing games at 3.6×** North America's share, and **shooters at only 0.22×**. |
-| How has the genre mix shifted? | Platformers were 32.5% of 1980s units. In the 2010s, Action (26.7%) and Shooters (18.4%) dominate. |
-| Which platform sold the most? | The **PS2**: 1.23B tracked units over 12 years, peaking in 2004. |
-| When did tracked sales peak? | **2008, at 678M units**. Later years decline, partly because the source tracks boxed retail and its recent years are incomplete. |
+This project takes about 16,000 games released between 1980 and 2016, loads them into a small data warehouse, digs into them with SQL, and tests a forecasting model. The chart colors are a nod to the Lands Between.
 
-![Japan vs North America genre index](docs/jp_vs_na_genres.png)
+![Japan vs North America](docs/jp_vs_na_genres.png)
+
+## What I found
+
+- Nintendo is the top publisher in North America (19% of units), Europe (17%), and Japan, where it holds 36% of the market. EA leads everywhere else.
+- Japan really does play different games. Role-playing games take 3.6 times the share of sales they do in North America, while shooters barely register (0.22x).
+- The genre mix flipped over time. Platformers were a third of all units in the 1980s. By the 2010s, action and shooter games made up almost half.
+- The PS2 is the best-selling platform in the data at 1.23 billion units, and it peaked in 2004.
+- Tracked sales peak in 2008 at 678 million units. The drop after that is partly real and partly because the source tracks boxed retail copies, so digital sales and recent years are undercounted.
+
+![What each decade played](docs/genre_by_decade.png)
+
+## Can you predict sales for a new game?
+
+I trained a gradient boosting model (scikit-learn) on games released through 2012, then tested it on 2,067 games from 2013 to 2016, the way you would forecast real upcoming releases. Inputs are platform, genre, publisher, and release year.
+
+| Region | R² | Avg error (millions of units) | Error if you just guess the median | Improvement |
+|---|---|---|---|---|
+| North America | 0.19 | 0.186 | 0.209 | 11% |
+| Europe | 0.10 | 0.164 | 0.177 | 7% |
+| Japan | 0.18 | 0.064 | 0.065 | 2% |
+
+The short answer is: a little. The model beats a naive guess, mostly in North America, but platform and genre only explain a small part of why a game sells. What really drives sales (franchise, reviews, marketing) isn't in this dataset. If I take this further, review scores and franchise flags are the first things I'd add.
+
 ![Market trend](docs/market_trend.png)
 ![Platform lifetimes](docs/platform_lifetime.png)
 
-## Forecasting new releases (honest results)
-Model: one-hot platform, genre, and publisher (top 40 + "Other") plus release year, fed into `HistGradientBoostingRegressor`, trained on log sales.
-**Time-based split:** trained on 14,120 titles released through 2012, tested on 2,067 titles from 2013–2016.
+## How it's built
 
-| Region | R² | MAE (M units) | Naive-median MAE | Improvement |
-|---|---|---|---|---|
-| North America | 0.19 | 0.186 | 0.209 | 11.1% |
-| Europe | 0.10 | 0.164 | 0.177 | 7.3% |
-| Japan | 0.18 | 0.064 | 0.065 | 1.6% |
+1. `etl.py` cleans the raw file (16,598 rows down to 16,187 after removing games with no release year or publisher). It then loads a SQLite star schema: one fact table of sales by game and region (64,748 rows) and dimension tables for game, platform, genre, publisher, year, and region. The tables are documented in [data_dictionary.md](data_dictionary.md).
+2. `queries.sql` holds the five analyses. They use CTEs and window functions (RANK, ROW_NUMBER, LAG, running averages).
+3. `model.py` trains and scores the forecast.
+4. `charts.py` makes the charts.
+5. `tests/` checks that row counts are right, no fact row points to a missing dimension, and sales totals match the raw file exactly.
 
-**Takeaway:** metadata alone explains only a small share of a game's sales, because hits are driven by franchise, quality, and marketing that this dataset doesn't capture. The model beats a naive baseline most in North America. Next steps would be review scores, franchise flags, and pre-release search interest.
+To run it:
 
-## Data model
-`fact_sales` (game × region grain) with `dim_game`, `dim_platform`, `dim_genre`, `dim_publisher`, `dim_year`, and `dim_region`. See [data_dictionary.md](data_dictionary.md).
-
-## Run it
-```bash
+```
 pip install -r requirements.txt
-python etl.py          # builds vgsales.db (16,598 raw rows -> 16,187 clean, 64,748 fact rows)
-python run_queries.py  # runs queries.sql -> results/*.csv
-python model.py        # forecasting metrics -> results/model_metrics.csv
-python charts.py       # docs/*.png
-python -m pytest       # ETL integrity tests (row counts, no orphan keys, totals reconcile to source)
+python etl.py
+python run_queries.py
+python model.py
+python charts.py
+python -m pytest
 ```
 
-## Data source
-[Global Video Game Sales](https://www.kaggle.com/datasets/thedevastator/global-video-game-sales) by The Devastator on Kaggle (CC0: Public Domain), originally scraped from VGChartz. The file in `data/raw/` came from a [Hugging Face mirror](https://huggingface.co/datasets/haoxianc/thedevastator_global-video-game-sales) of that dataset. `data/raw/SOURCE.txt` records its row count and hash.
+## Data
 
-*Author: Elijah Villa, MIS @ University of Arizona*
+[Global Video Game Sales](https://www.kaggle.com/datasets/thedevastator/global-video-game-sales) on Kaggle (public domain, CC0), originally scraped from VGChartz. My copy came from a [Hugging Face mirror](https://huggingface.co/datasets/haoxianc/thedevastator_global-video-game-sales) of the same file, and `data/raw/SOURCE.txt` records its row count and hash.
+
+Elijah Villa, Management Information Systems, University of Arizona
