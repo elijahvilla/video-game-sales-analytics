@@ -1,0 +1,4 @@
+region,train_titles,test_titles,r2,mae_m,baseline_mae_m,mae_improvement_pct
+NA,14120,2067,0.1903,0.1857,0.2089,11.094
+EU,14120,2067,0.1035,0.1643,0.1772,7.2959
+JP,14120,2067,0.1849,0.0639,0.0649,1.6083

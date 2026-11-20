@@ -1,0 +1,13 @@
+region,rnk,publisher,sales_m,share_pct
+EU,1,Nintendo,418.3,17.4
+EU,2,Electronic Arts,367.4,15.3
+EU,3,Activision,213.7,8.9
+JP,1,Nintendo,455.0,35.5
+JP,2,Namco Bandai Games,126.8,9.9
+JP,3,Konami Digital Entertainment,90.9,7.1
+NA,1,Nintendo,815.8,18.9
+NA,2,Electronic Arts,584.2,13.5
+NA,3,Activision,426.0,9.9
+Other,1,Electronic Arts,127.6,16.2
+Other,2,Nintendo,95.2,12.1
+Other,3,Sony Computer Entertainment,80.4,10.2

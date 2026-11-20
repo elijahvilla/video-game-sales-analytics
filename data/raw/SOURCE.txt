@@ -1,0 +1,4 @@
+SOURCE=https://huggingface.co/datasets/haoxianc/thedevastator_global-video-game-sales (mirror)
+ORIGINAL=https://www.kaggle.com/datasets/thedevastator/global-video-game-sales (CC0), data from vgchartz.com
+SHA256_PREFIX=e2076095ffcae2a9
+ROWS=16598
