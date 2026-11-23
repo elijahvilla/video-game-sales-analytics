@@ -4,6 +4,14 @@ I've played games my whole life (Elden Ring is my favorite), and I wanted to ans
 
 This project takes about 16,000 games released between 1980 and 2016, loads them into a small data warehouse, digs into them with SQL, and tests a forecasting model. The chart colors are a nod to the Lands Between.
 
+## Interactive dashboard
+
+**[Open it on Tableau Public](https://public.tableau.com/app/profile/elijah.villa/viz/vgsales_dashboard_17954664879300/VideoGameSales1980-2016)**. You can filter by region and decade, and clicking a genre in the heatmap filters the rest of the dashboard.
+
+[![Tableau dashboard](docs/tableau_dashboard.png)](https://public.tableau.com/app/profile/elijah.villa/viz/vgsales_dashboard_17954664879300/VideoGameSales1980-2016)
+
+I themed it after the games I grew up on. The regions are colored Mario red, Sonic blue, Pokémon yellow, and Zelda green, the pixel-art header is original, and the takeaways are written as Elden Ring ground messages.
+
 ![Japan vs North America](docs/jp_vs_na_genres.png)
 
 ## What I found
@@ -37,7 +45,9 @@ The short answer is: a little. The model beats a naive guess, mostly in North Am
 2. `queries.sql` holds the five analyses. They use CTEs and window functions (RANK, ROW_NUMBER, LAG, running averages).
 3. `model.py` trains and scores the forecast.
 4. `charts.py` makes the charts.
-5. `tests/` checks that row counts are right, no fact row points to a missing dimension, and sales totals match the raw file exactly.
+5. `tableau_export.py` flattens the star schema into one tidy table for Tableau, at the same grain as the fact table. A test confirms its row count and sales total match the warehouse exactly.
+6. The dashboard is built as code. `tableau/build_workbook.py` writes the Tableau workbook XML (sheets, layout, colors, text), `tableau/make_extract.py` builds the `.hyper` extract that Tableau Public requires, and `tableau/make_header.py` draws the pixel-art header.
+7. `tests/` checks that row counts are right, no fact row points to a missing dimension, and sales totals match the raw file exactly.
 
 To run it:
 
@@ -49,6 +59,17 @@ python model.py
 python charts.py
 python -m pytest
 ```
+
+To rebuild the dashboard (needs `pip install -r requirements-tableau.txt` and Tableau Public Desktop):
+
+```
+python tableau_export.py
+python tableau/make_extract.py
+python tableau/make_header.py <path to PressStart2P-Regular.ttf>
+python tableau/build_workbook.py
+```
+
+Then open `tableau/vgsales_dashboard.twb`. `build_workbook.py` also registers the custom color palettes in Tableau's `Preferences.tps`, which is where Desktop loads them from. Assign the "Game Regions" and "Game Platforms" palettes to the two legends once (Edit Colors, then Assign Palette).
 
 ## Data
 

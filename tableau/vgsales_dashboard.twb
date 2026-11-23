@@ -1,0 +1,253 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<workbook source-build='2025.1.0 (20251.25.0101.0000)' source-platform='win' version='18.1' xmlns:user='http://www.tableausoftware.com/xml/user'>
+<document-format-change-manifest />
+<preferences>
+  <color-palette name='Lands Between Gold' type='ordered-sequential'><color>#221D16</color><color>#3F3420</color><color>#64511F</color><color>#8E6F22</color></color-palette>
+  <color-palette name='Game Regions' type='regular'><color>#2E6FDB</color><color>#FFCB05</color><color>#E52521</color><color>#3FA34D</color></color-palette><color-palette name='Game Platforms' type='regular'><color>#FF8C42</color><color>#9B59B6</color><color>#8FB3FF</color><color>#D4AF37</color><color>#2E6FDB</color><color>#9A8F78</color><color>#E52521</color><color>#52B043</color></color-palette>
+</preferences>
+<style />
+<datasources>
+<datasource caption='vgsales_tableau' inline='true' name='federated.vgsales0' version='18.1'>
+  <connection class='federated'>
+    <named-connections>
+      <named-connection caption='vgsales_tableau' name='textscan.vgsales0'>
+        <connection class='textscan' directory='C:/Users/ual-laptop/Documents/Claude Work/video-game-sales-analytics/tableau' filename='vgsales_tableau.csv' password='' server='' />
+      </named-connection>
+    </named-connections>
+    <relation connection='textscan.vgsales0' name='vgsales_tableau.csv' table='[vgsales_tableau#csv]' type='table'>
+      <columns character-set='UTF-8' header='yes' locale='en_US' separator=','>
+<column datatype='string' name='Game' ordinal='0' />
+<column datatype='string' name='Platform' ordinal='1' />
+<column datatype='string' name='Genre' ordinal='2' />
+<column datatype='string' name='Publisher' ordinal='3' />
+<column datatype='integer' name='Year' ordinal='4' />
+<column datatype='string' name='Decade' ordinal='5' />
+<column datatype='string' name='Region' ordinal='6' />
+<column datatype='real' name='Sales (M units)' ordinal='7' />
+      </columns>
+    </relation>
+  </connection>
+<column datatype='string' name='[Game]' role='dimension' type='nominal' />
+<column datatype='string' name='[Platform]' role='dimension' type='nominal' />
+<column datatype='string' name='[Genre]' role='dimension' type='nominal' />
+<column datatype='string' name='[Publisher]' role='dimension' type='nominal'><aliases><alias key='&quot;Sony Computer Entertainment&quot;' value='Sony' /><alias key='&quot;Take-Two Interactive&quot;' value='Take-Two' /><alias key='&quot;Konami Digital Entertainment&quot;' value='Konami' /><alias key='&quot;Namco Bandai Games&quot;' value='Bandai Namco' /></aliases></column>
+<column datatype='integer' name='[Year]' role='dimension' type='quantitative' />
+<column datatype='string' name='[Decade]' role='dimension' type='nominal' />
+<column datatype='string' name='[Region]' role='dimension' type='nominal'><aliases><alias key='&quot;North America&quot;' value='N. America' /><alias key='&quot;Rest of World&quot;' value='Other' /></aliases></column>
+<column datatype='real' name='[Sales (M units)]' role='measure' type='quantitative' />
+  <extract count='-1' enabled='true' units='records'>
+    <connection access_mode='readonly' author-locale='en_US' authentication='auth-none' class='hyper' dbname='C:/Users/ual-laptop/Documents/Claude Work/video-game-sales-analytics/tableau/vgsales_tableau.hyper' default-settings='yes' schema='Extract' sslmode='' tablename='Extract' username='tableau_internal_user'>
+      <relation name='Extract' table='[Extract].[Extract]' type='table' />
+    </connection>
+  </extract>
+  <style>
+    <style-rule element='mark'>
+      <encoding attr='color' field='[none:Region:nk]' type='palette'><map to='#E52521'><bucket>&quot;North America&quot;</bucket></map><map to='#2E6FDB'><bucket>&quot;Europe&quot;</bucket></map><map to='#FFCB05'><bucket>&quot;Japan&quot;</bucket></map><map to='#3FA34D'><bucket>&quot;Rest of World&quot;</bucket></map></encoding>
+      <encoding attr='color' field='[none:Platform:nk]' type='palette'><map to='#D4AF37'><bucket>&quot;PS2&quot;</bucket></map><map to='#52B043'><bucket>&quot;X360&quot;</bucket></map><map to='#2E6FDB'><bucket>&quot;PS3&quot;</bucket></map><map to='#E52521'><bucket>&quot;Wii&quot;</bucket></map><map to='#FF8C42'><bucket>&quot;DS&quot;</bucket></map><map to='#8FB3FF'><bucket>&quot;PS&quot;</bucket></map><map to='#9B59B6'><bucket>&quot;GBA&quot;</bucket></map><map to='#9A8F78'><bucket>&quot;PSP&quot;</bucket></map></encoding>
+    </style-rule>
+  </style>
+</datasource>
+</datasources>
+<actions><action caption='Click a genre to filter' name='[Action1_genre]'><activation auto-clear='true' type='on-select' /><source dashboard='Video Game Sales 1980-2016' type='sheet' worksheet='Regional Mix' /><command command='tsc:tsl-filter'><param name='special-fields' value='all' /><param name='target' value='Video Game Sales 1980-2016' /></command></action></actions>
+<worksheets>
+<worksheet name='Market Over Time'>
+  <layout-options><title><formatted-text><run bold='true' fontcolor='#D4AF37' fontname='Tableau Bold' fontsize='14'>WORLD 1-1 TO 2016</run><run>Æ&#10;</run><run fontcolor='#9A8F78' fontname='Tableau Book' fontsize='9'>Tracked retail units per year (millions), stacked by region. The high score was set in 2008.</run></formatted-text></title></layout-options>
+  <table>
+    <view>
+      <datasources><datasource caption='vgsales_tableau' name='federated.vgsales0' /></datasources>
+      <datasource-dependencies datasource='federated.vgsales0'>
+<column datatype='integer' name='[Year]' role='dimension' type='quantitative' />
+<column-instance column='[Year]' derivation='None' name='[none:Year:qk]' pivot='key' type='quantitative' />
+<column datatype='real' name='[Sales (M units)]' role='measure' type='quantitative' />
+<column-instance column='[Sales (M units)]' derivation='Sum' name='[sum:Sales (M units):qk]' pivot='key' type='quantitative' />
+<column datatype='string' name='[Region]' role='dimension' type='nominal'><aliases><alias key='&quot;North America&quot;' value='N. America' /><alias key='&quot;Rest of World&quot;' value='Other' /></aliases></column>
+<column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
+<column datatype='string' name='[Decade]' role='dimension' type='nominal' />
+<column-instance column='[Decade]' derivation='None' name='[none:Decade:nk]' pivot='key' type='nominal' />
+      </datasource-dependencies>
+      
+      <filter class='categorical' column='[federated.vgsales0].[none:Region:nk]' filter-group='1'><groupfilter function='level-members' level='[none:Region:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' /></filter>
+      <filter class='categorical' column='[federated.vgsales0].[none:Decade:nk]' filter-group='2'><groupfilter function='level-members' level='[none:Decade:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' /></filter>
+      
+      <slices><column>[federated.vgsales0].[none:Region:nk]</column><column>[federated.vgsales0].[none:Decade:nk]</column></slices>
+      <aggregation value='true' />
+    </view>
+    <style>
+  <style-rule element='worksheet'><format attr='display-field-labels' scope='cols' value='false' /><format attr='display-field-labels' scope='rows' value='false' /><format attr='font-family' value='Tableau Book' /><format attr='color' value='#E8DFC8' /><format attr='background-color' value='#201C16' /></style-rule>
+  <style-rule element='table'><format attr='background-color' value='#201C16' /></style-rule>
+  <style-rule element='title'><format attr='background-color' value='#201C16' /></style-rule>
+  <style-rule element='axis'><format attr='color' value='#9A8F78' /><format attr='font-size' value='8' /></style-rule>
+  <style-rule element='header'><format attr='color' value='#E8DFC8' /><format attr='font-size' value='9' /></style-rule>
+  <style-rule element='label'><format attr='color' value='#E8DFC8' /><format attr='font-size' value='9' /></style-rule>
+  <style-rule element='cell'><format attr='color' value='#E8DFC8' /></style-rule>
+  <style-rule element='gridline'><format attr='line-visibility' value='off' /></style-rule>
+  <style-rule element='zeroline'><format attr='line-visibility' value='off' /></style-rule>
+  <style-rule element='mark'><encoding attr='color' field='[federated.vgsales0].[none:Region:nk]' palette='Game Regions' type='palette' /><encoding attr='color' field='[federated.vgsales0].[none:Platform:nk]' palette='Game Platforms' type='palette' /></style-rule>
+  
+</style>
+    <panes>
+      <pane selection-relaxation-option='selection-relaxation-allow'>
+        <view><breakdown value='auto' /></view>
+        <mark class='Area' />
+        <encodings><color column='[federated.vgsales0].[none:Region:nk]' /></encodings>
+        <style><style-rule element='mark'></style-rule></style>
+      </pane>
+    </panes>
+    <rows>[federated.vgsales0].[sum:Sales (M units):qk]</rows>
+    <cols>[federated.vgsales0].[none:Year:qk]</cols>
+  </table>
+</worksheet>
+<worksheet name='Regional Mix'>
+  <layout-options><title><formatted-text><run bold='true' fontcolor='#D4AF37' fontname='Tableau Bold' fontsize='14'>CHOOSE YOUR KINGDOM</run><run>Æ&#10;</run><run fontcolor='#9A8F78' fontname='Tableau Book' fontsize='9'>Share of each region&#x27;s units by genre. Click a square to filter the dashboard.</run></formatted-text></title></layout-options>
+  <table>
+    <view>
+      <datasources><datasource caption='vgsales_tableau' name='federated.vgsales0' /></datasources>
+      <datasource-dependencies datasource='federated.vgsales0'>
+<column datatype='string' name='[Genre]' role='dimension' type='nominal' />
+<column-instance column='[Genre]' derivation='None' name='[none:Genre:nk]' pivot='key' type='nominal' />
+<column datatype='real' name='[Sales (M units)]' role='measure' type='quantitative' />
+<column-instance column='[Sales (M units)]' derivation='Sum' name='[pcto:sum:Sales (M units):qk]' pivot='key' type='quantitative'><table-calc ordering-field='[federated.vgsales0].[none:Genre:nk]' ordering-type='Field' type='PctTotal' /></column-instance>
+<column-instance column='[Sales (M units)]' derivation='Sum' name='[sum:Sales (M units):qk]' pivot='key' type='quantitative' />
+<column datatype='string' name='[Region]' role='dimension' type='nominal'><aliases><alias key='&quot;North America&quot;' value='N. America' /><alias key='&quot;Rest of World&quot;' value='Other' /></aliases></column>
+<column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
+<column datatype='string' name='[Decade]' role='dimension' type='nominal' />
+<column-instance column='[Decade]' derivation='None' name='[none:Decade:nk]' pivot='key' type='nominal' />
+      </datasource-dependencies>
+      
+      <filter class='categorical' column='[federated.vgsales0].[none:Region:nk]' filter-group='1'><groupfilter function='level-members' level='[none:Region:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' /></filter>
+      <filter class='categorical' column='[federated.vgsales0].[none:Decade:nk]' filter-group='2'><groupfilter function='level-members' level='[none:Decade:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' /></filter>
+      <sort class='computed' column='[federated.vgsales0].[none:Genre:nk]' direction='DESC' using='[federated.vgsales0].[sum:Sales (M units):qk]' />
+      <slices><column>[federated.vgsales0].[none:Region:nk]</column><column>[federated.vgsales0].[none:Decade:nk]</column></slices>
+      <aggregation value='true' />
+    </view>
+    <style>
+  <style-rule element='worksheet'><format attr='display-field-labels' scope='cols' value='false' /><format attr='display-field-labels' scope='rows' value='false' /><format attr='font-family' value='Tableau Book' /><format attr='color' value='#E8DFC8' /><format attr='background-color' value='#201C16' /></style-rule>
+  <style-rule element='table'><format attr='background-color' value='#201C16' /></style-rule>
+  <style-rule element='title'><format attr='background-color' value='#201C16' /></style-rule>
+  <style-rule element='axis'><format attr='color' value='#9A8F78' /><format attr='font-size' value='8' /></style-rule>
+  <style-rule element='header'><format attr='color' value='#E8DFC8' /><format attr='font-size' value='9' /></style-rule>
+  <style-rule element='label'><format attr='color' value='#E8DFC8' /><format attr='font-size' value='9' /></style-rule>
+  <style-rule element='cell'><format attr='color' value='#E8DFC8' /></style-rule>
+  <style-rule element='gridline'><format attr='line-visibility' value='off' /></style-rule>
+  <style-rule element='zeroline'><format attr='line-visibility' value='off' /></style-rule>
+  <style-rule element='mark'><encoding attr='color' field='[federated.vgsales0].[none:Region:nk]' palette='Game Regions' type='palette' /><encoding attr='color' field='[federated.vgsales0].[none:Platform:nk]' palette='Game Platforms' type='palette' /></style-rule>
+  <style-rule element='cell'><format attr='text-format' field='[federated.vgsales0].[pcto:sum:Sales (M units):qk]' value='p0%' /></style-rule><style-rule element='mark'><encoding attr='color' field='[federated.vgsales0].[pcto:sum:Sales (M units):qk]' palette='Lands Between Gold' type='interpolated' /></style-rule>
+</style>
+    <panes>
+      <pane selection-relaxation-option='selection-relaxation-allow'>
+        <view><breakdown value='auto' /></view>
+        <mark class='Square' />
+        <encodings><color column='[federated.vgsales0].[pcto:sum:Sales (M units):qk]' /><text column='[federated.vgsales0].[pcto:sum:Sales (M units):qk]' /></encodings>
+        <style><style-rule element='mark'><format attr='mark-labels-show' value='true' /></style-rule></style>
+      </pane>
+    </panes>
+    <rows>[federated.vgsales0].[none:Genre:nk]</rows>
+    <cols>[federated.vgsales0].[none:Region:nk]</cols>
+  </table>
+</worksheet>
+<worksheet name='Platform Lifecycles'>
+  <layout-options><title><formatted-text><run bold='true' fontcolor='#D4AF37' fontname='Tableau Bold' fontsize='14'>EXTRA LIVES</run><run>Æ&#10;</run><run fontcolor='#9A8F78' fontname='Tableau Book' fontsize='9'>Units per year, 8 best-selling platforms since 1994. Every console gets a launch, a peak, and a game over.</run></formatted-text></title></layout-options>
+  <table>
+    <view>
+      <datasources><datasource caption='vgsales_tableau' name='federated.vgsales0' /></datasources>
+      <datasource-dependencies datasource='federated.vgsales0'>
+<column datatype='integer' name='[Year]' role='dimension' type='quantitative' />
+<column-instance column='[Year]' derivation='None' name='[none:Year:qk]' pivot='key' type='quantitative' />
+<column datatype='string' name='[Platform]' role='dimension' type='nominal' />
+<column-instance column='[Platform]' derivation='None' name='[none:Platform:nk]' pivot='key' type='nominal' />
+<column datatype='real' name='[Sales (M units)]' role='measure' type='quantitative' />
+<column-instance column='[Sales (M units)]' derivation='Sum' name='[sum:Sales (M units):qk]' pivot='key' type='quantitative' />
+<column datatype='string' name='[Region]' role='dimension' type='nominal'><aliases><alias key='&quot;North America&quot;' value='N. America' /><alias key='&quot;Rest of World&quot;' value='Other' /></aliases></column>
+<column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
+<column datatype='string' name='[Decade]' role='dimension' type='nominal' />
+<column-instance column='[Decade]' derivation='None' name='[none:Decade:nk]' pivot='key' type='nominal' />
+      </datasource-dependencies>
+      <filter class='categorical' column='[federated.vgsales0].[none:Platform:nk]'><groupfilter function='union' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate'><groupfilter function='member' level='[none:Platform:nk]' member='&quot;PS2&quot;' /><groupfilter function='member' level='[none:Platform:nk]' member='&quot;X360&quot;' /><groupfilter function='member' level='[none:Platform:nk]' member='&quot;PS3&quot;' /><groupfilter function='member' level='[none:Platform:nk]' member='&quot;Wii&quot;' /><groupfilter function='member' level='[none:Platform:nk]' member='&quot;DS&quot;' /><groupfilter function='member' level='[none:Platform:nk]' member='&quot;PS&quot;' /><groupfilter function='member' level='[none:Platform:nk]' member='&quot;GBA&quot;' /><groupfilter function='member' level='[none:Platform:nk]' member='&quot;PSP&quot;' /></groupfilter></filter><filter class='quantitative' column='[federated.vgsales0].[none:Year:qk]' included-values='in-range'><min>1994</min></filter>
+      <filter class='categorical' column='[federated.vgsales0].[none:Region:nk]' filter-group='1'><groupfilter function='level-members' level='[none:Region:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' /></filter>
+      <filter class='categorical' column='[federated.vgsales0].[none:Decade:nk]' filter-group='2'><groupfilter function='level-members' level='[none:Decade:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' /></filter>
+      
+      <slices><column>[federated.vgsales0].[none:Region:nk]</column><column>[federated.vgsales0].[none:Decade:nk]</column></slices>
+      <aggregation value='true' />
+    </view>
+    <style>
+  <style-rule element='worksheet'><format attr='display-field-labels' scope='cols' value='false' /><format attr='display-field-labels' scope='rows' value='false' /><format attr='font-family' value='Tableau Book' /><format attr='color' value='#E8DFC8' /><format attr='background-color' value='#201C16' /></style-rule>
+  <style-rule element='table'><format attr='background-color' value='#201C16' /></style-rule>
+  <style-rule element='title'><format attr='background-color' value='#201C16' /></style-rule>
+  <style-rule element='axis'><format attr='color' value='#9A8F78' /><format attr='font-size' value='8' /></style-rule>
+  <style-rule element='header'><format attr='color' value='#E8DFC8' /><format attr='font-size' value='9' /></style-rule>
+  <style-rule element='label'><format attr='color' value='#E8DFC8' /><format attr='font-size' value='9' /></style-rule>
+  <style-rule element='cell'><format attr='color' value='#E8DFC8' /></style-rule>
+  <style-rule element='gridline'><format attr='line-visibility' value='off' /></style-rule>
+  <style-rule element='zeroline'><format attr='line-visibility' value='off' /></style-rule>
+  <style-rule element='mark'><encoding attr='color' field='[federated.vgsales0].[none:Region:nk]' palette='Game Regions' type='palette' /><encoding attr='color' field='[federated.vgsales0].[none:Platform:nk]' palette='Game Platforms' type='palette' /></style-rule>
+  
+</style>
+    <panes>
+      <pane selection-relaxation-option='selection-relaxation-allow'>
+        <view><breakdown value='auto' /></view>
+        <mark class='Line' />
+        <encodings><color column='[federated.vgsales0].[none:Platform:nk]' /></encodings>
+        <style><style-rule element='mark'></style-rule></style>
+      </pane>
+    </panes>
+    <rows>[federated.vgsales0].[sum:Sales (M units):qk]</rows>
+    <cols>[federated.vgsales0].[none:Year:qk]</cols>
+  </table>
+</worksheet>
+<worksheet name='Top Publishers'>
+  <layout-options><title><formatted-text><run bold='true' fontcolor='#D4AF37' fontname='Tableau Bold' fontsize='14'>FINAL BOSSES</run><run>Æ&#10;</run><run fontcolor='#9A8F78' fontname='Tableau Book' fontsize='9'>Top 10 publishers by lifetime units (millions).</run></formatted-text></title></layout-options>
+  <table>
+    <view>
+      <datasources><datasource caption='vgsales_tableau' name='federated.vgsales0' /></datasources>
+      <datasource-dependencies datasource='federated.vgsales0'>
+<column datatype='string' name='[Publisher]' role='dimension' type='nominal'><aliases><alias key='&quot;Sony Computer Entertainment&quot;' value='Sony' /><alias key='&quot;Take-Two Interactive&quot;' value='Take-Two' /><alias key='&quot;Konami Digital Entertainment&quot;' value='Konami' /><alias key='&quot;Namco Bandai Games&quot;' value='Bandai Namco' /></aliases></column>
+<column-instance column='[Publisher]' derivation='None' name='[none:Publisher:nk]' pivot='key' type='nominal' />
+<column datatype='real' name='[Sales (M units)]' role='measure' type='quantitative' />
+<column-instance column='[Sales (M units)]' derivation='Sum' name='[sum:Sales (M units):qk]' pivot='key' type='quantitative' />
+<column datatype='string' name='[Region]' role='dimension' type='nominal'><aliases><alias key='&quot;North America&quot;' value='N. America' /><alias key='&quot;Rest of World&quot;' value='Other' /></aliases></column>
+<column-instance column='[Region]' derivation='None' name='[none:Region:nk]' pivot='key' type='nominal' />
+<column datatype='string' name='[Decade]' role='dimension' type='nominal' />
+<column-instance column='[Decade]' derivation='None' name='[none:Decade:nk]' pivot='key' type='nominal' />
+      </datasource-dependencies>
+      <filter class='categorical' column='[federated.vgsales0].[none:Publisher:nk]'><groupfilter function='union' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate'><groupfilter function='member' level='[none:Publisher:nk]' member='&quot;Nintendo&quot;' /><groupfilter function='member' level='[none:Publisher:nk]' member='&quot;Electronic Arts&quot;' /><groupfilter function='member' level='[none:Publisher:nk]' member='&quot;Activision&quot;' /><groupfilter function='member' level='[none:Publisher:nk]' member='&quot;Sony Computer Entertainment&quot;' /><groupfilter function='member' level='[none:Publisher:nk]' member='&quot;Ubisoft&quot;' /><groupfilter function='member' level='[none:Publisher:nk]' member='&quot;Take-Two Interactive&quot;' /><groupfilter function='member' level='[none:Publisher:nk]' member='&quot;THQ&quot;' /><groupfilter function='member' level='[none:Publisher:nk]' member='&quot;Konami Digital Entertainment&quot;' /><groupfilter function='member' level='[none:Publisher:nk]' member='&quot;Sega&quot;' /><groupfilter function='member' level='[none:Publisher:nk]' member='&quot;Namco Bandai Games&quot;' /></groupfilter></filter>
+      <filter class='categorical' column='[federated.vgsales0].[none:Region:nk]' filter-group='1'><groupfilter function='level-members' level='[none:Region:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' /></filter>
+      <filter class='categorical' column='[federated.vgsales0].[none:Decade:nk]' filter-group='2'><groupfilter function='level-members' level='[none:Decade:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' /></filter>
+      <sort class='computed' column='[federated.vgsales0].[none:Publisher:nk]' direction='DESC' using='[federated.vgsales0].[sum:Sales (M units):qk]' />
+      <slices><column>[federated.vgsales0].[none:Region:nk]</column><column>[federated.vgsales0].[none:Decade:nk]</column></slices>
+      <aggregation value='true' />
+    </view>
+    <style>
+  <style-rule element='worksheet'><format attr='display-field-labels' scope='cols' value='false' /><format attr='display-field-labels' scope='rows' value='false' /><format attr='font-family' value='Tableau Book' /><format attr='color' value='#E8DFC8' /><format attr='background-color' value='#201C16' /></style-rule>
+  <style-rule element='table'><format attr='background-color' value='#201C16' /></style-rule>
+  <style-rule element='title'><format attr='background-color' value='#201C16' /></style-rule>
+  <style-rule element='axis'><format attr='color' value='#9A8F78' /><format attr='font-size' value='8' /></style-rule>
+  <style-rule element='header'><format attr='color' value='#E8DFC8' /><format attr='font-size' value='9' /></style-rule>
+  <style-rule element='label'><format attr='color' value='#E8DFC8' /><format attr='font-size' value='9' /></style-rule>
+  <style-rule element='cell'><format attr='color' value='#E8DFC8' /></style-rule>
+  <style-rule element='gridline'><format attr='line-visibility' value='off' /></style-rule>
+  <style-rule element='zeroline'><format attr='line-visibility' value='off' /></style-rule>
+  <style-rule element='mark'><encoding attr='color' field='[federated.vgsales0].[none:Region:nk]' palette='Game Regions' type='palette' /><encoding attr='color' field='[federated.vgsales0].[none:Platform:nk]' palette='Game Platforms' type='palette' /></style-rule>
+  <style-rule element='cell'><format attr='text-format' field='[federated.vgsales0].[sum:Sales (M units):qk]' value='n#,##0' /></style-rule>
+</style>
+    <panes>
+      <pane selection-relaxation-option='selection-relaxation-allow'>
+        <view><breakdown value='auto' /></view>
+        <mark class='Bar' />
+        <encodings><text column='[federated.vgsales0].[sum:Sales (M units):qk]' /></encodings>
+        <style><style-rule element='mark'><format attr='mark-color' value='#D4AF37' /><format attr='mark-labels-show' value='true' /></style-rule></style>
+      </pane>
+    </panes>
+    <rows>[federated.vgsales0].[none:Publisher:nk]</rows>
+    <cols>[federated.vgsales0].[sum:Sales (M units):qk]</cols>
+  </table>
+</worksheet>
+</worksheets>
+<dashboards>
+<dashboard name='Video Game Sales 1980-2016'>
+  <style><style-rule element='table'><format attr='background-color' value='#16130F' /></style-rule></style>
+  <size maxheight='1720' maxwidth='1200' minheight='1720' minwidth='1200' />
+  <zones><zone h='100000' id='1' type-v2='layout-basic' w='100000' x='0' y='0'><zone id='11' is-scaled='1' param='C:/Users/ual-laptop/Documents/Claude Work/video-game-sales-analytics/tableau/assets/header.png' type-v2='bitmap' x='0' y='0' w='100000' h='11628'><zone-style><format attr='background-color' value='#16130F' /><format attr='margin' value='0' /><format attr='padding' value='0' /></zone-style></zone><zone id='12' type-v2='text' x='1667' y='12209' w='23333' h='9302'><formatted-text><run bold='true' fontcolor='#D4AF37' fontname='Tableau Bold' fontsize='9'>WORLD RECORD</run><run>Æ&#10;</run><run bold='true' fontcolor='#E8DFC8' fontname='Tableau Bold' fontsize='22'>82.7M</run><run>Æ&#10;</run><run fontcolor='#9A8F78' fontname='Tableau Book' fontsize='9'>Wii Sports, best-selling title</run></formatted-text><zone-style><format attr='background-color' value='#201C16' /><format attr='border-color' value='#3A3226' /><format attr='border-style' value='solid' /><format attr='border-width' value='1' /><format attr='margin' value='6' /><format attr='padding' value='8' /></zone-style></zone><zone id='13' type-v2='text' x='25833' y='12209' w='23333' h='9302'><formatted-text><run bold='true' fontcolor='#D4AF37' fontname='Tableau Bold' fontsize='9'>FINAL BOSS PLATFORM</run><run>Æ&#10;</run><run bold='true' fontcolor='#E8DFC8' fontname='Tableau Bold' fontsize='22'>1.23B</run><run>Æ&#10;</run><run fontcolor='#9A8F78' fontname='Tableau Book' fontsize='9'>PS2 lifetime units</run></formatted-text><zone-style><format attr='background-color' value='#201C16' /><format attr='border-color' value='#3A3226' /><format attr='border-style' value='solid' /><format attr='border-width' value='1' /><format attr='margin' value='6' /><format attr='padding' value='8' /></zone-style></zone><zone id='14' type-v2='text' x='50000' y='12209' w='23333' h='9302'><formatted-text><run bold='true' fontcolor='#D4AF37' fontname='Tableau Bold' fontsize='9'>HOME-FIELD ADVANTAGE</run><run>Æ&#10;</run><run bold='true' fontcolor='#E8DFC8' fontname='Tableau Bold' fontsize='22'>35.5%</run><run>Æ&#10;</run><run fontcolor='#9A8F78' fontname='Tableau Book' fontsize='9'>Nintendo&#x27;s share of Japan</run></formatted-text><zone-style><format attr='background-color' value='#201C16' /><format attr='border-color' value='#3A3226' /><format attr='border-style' value='solid' /><format attr='border-width' value='1' /><format attr='margin' value='6' /><format attr='padding' value='8' /></zone-style></zone><zone id='15' mode='checkdropdown' name='Market Over Time' param='[federated.vgsales0].[none:Region:nk]' type-v2='filter' values='database' x='74167' y='12209' w='24167' h='4535'><zone-style><format attr='background-color' value='#201C16' /><format attr='border-color' value='#3A3226' /><format attr='border-style' value='solid' /><format attr='border-width' value='1' /><format attr='margin' value='4' /><format attr='padding' value='2' /></zone-style></zone><zone id='16' mode='checkdropdown' name='Market Over Time' param='[federated.vgsales0].[none:Decade:nk]' type-v2='filter' values='database' x='74167' y='16977' w='24167' h='4535'><zone-style><format attr='background-color' value='#201C16' /><format attr='border-color' value='#3A3226' /><format attr='border-style' value='solid' /><format attr='border-width' value='1' /><format attr='margin' value='4' /><format attr='padding' value='2' /></zone-style></zone><zone id='17' name='Market Over Time' x='1667' y='22093' w='82500' h='21512'><zone-style><format attr='background-color' value='#201C16' /><format attr='border-color' value='#3A3226' /><format attr='border-style' value='solid' /><format attr='border-width' value='1' /><format attr='margin' value='6' /><format attr='padding' value='8' /></zone-style></zone><zone id='18' name='Market Over Time' pane-specification-id='0' param='[federated.vgsales0].[none:Region:nk]' type-v2='color' x='85000' y='22093' w='13333' h='21512'><zone-style><format attr='background-color' value='#201C16' /><format attr='border-color' value='#3A3226' /><format attr='border-style' value='solid' /><format attr='border-width' value='1' /><format attr='margin' value='6' /><format attr='padding' value='8' /></zone-style></zone><zone id='19' name='Regional Mix' x='1667' y='44186' w='45000' h='25000'><zone-style><format attr='background-color' value='#201C16' /><format attr='border-color' value='#3A3226' /><format attr='border-style' value='solid' /><format attr='border-width' value='1' /><format attr='margin' value='6' /><format attr='padding' value='8' /></zone-style></zone><zone id='20' name='Platform Lifecycles' x='47500' y='44186' w='39167' h='25000'><zone-style><format attr='background-color' value='#201C16' /><format attr='border-color' value='#3A3226' /><format attr='border-style' value='solid' /><format attr='border-width' value='1' /><format attr='margin' value='6' /><format attr='padding' value='8' /></zone-style></zone><zone id='21' name='Platform Lifecycles' pane-specification-id='0' param='[federated.vgsales0].[none:Platform:nk]' type-v2='color' x='87500' y='44186' w='10833' h='25000'><zone-style><format attr='background-color' value='#201C16' /><format attr='border-color' value='#3A3226' /><format attr='border-style' value='solid' /><format attr='border-width' value='1' /><format attr='margin' value='6' /><format attr='padding' value='8' /></zone-style></zone><zone id='22' name='Top Publishers' x='1667' y='69767' w='51667' h='24419'><zone-style><format attr='background-color' value='#201C16' /><format attr='border-color' value='#3A3226' /><format attr='border-style' value='solid' /><format attr='border-width' value='1' /><format attr='margin' value='6' /><format attr='padding' value='8' /></zone-style></zone><zone id='23' type-v2='text' x='54167' y='69767' w='44167' h='24419'><formatted-text><run bold='true' fontcolor='#D4AF37' fontname='Tableau Bold' fontsize='14'>INSIGHT AHEAD</run><run>Æ&#10;</run><run fontcolor='#9A8F78' fontname='Tableau Book' fontsize='9'>Messages left for the next player</run><run>Æ&#10;</run><run>Æ&#10;</run><run bold='true' fontcolor='#D4AF37' fontname='Tableau Bold' fontsize='10'>Japan ahead, therefore role-playing.</run><run>Æ&#10;</run><run fontcolor='#E8DFC8' fontname='Tableau Book' fontsize='9'>RPGs take 3.6x the share of units in Japan that they do in North America.</run><run>Æ&#10;</run><run>Æ&#10;</run><run bold='true' fontcolor='#D4AF37' fontname='Tableau Bold' fontsize='10'>Strong foe ahead: Nintendo.</run><run>Æ&#10;</run><run fontcolor='#E8DFC8' fontname='Tableau Book' fontsize='9'>#1 publisher in North America (19%), Europe (17%), and Japan (36%).</run><run>Æ&#10;</run><run>Æ&#10;</run><run bold='true' fontcolor='#D4AF37' fontname='Tableau Bold' fontsize='10'>Praise the PS2.</run><run>Æ&#10;</run><run fontcolor='#E8DFC8' fontname='Tableau Book' fontsize='9'>1.23 billion units, the best-selling platform in the data. Its peak year was 2004.</run></formatted-text><zone-style><format attr='background-color' value='#201C16' /><format attr='border-color' value='#3A3226' /><format attr='border-style' value='solid' /><format attr='border-width' value='1' /><format attr='margin' value='6' /><format attr='padding' value='8' /></zone-style></zone><zone id='24' type-v2='text' x='1667' y='94767' w='96667' h='4942'><formatted-text><run bold='true' fontcolor='#D4AF37' fontname='Tableau Bold' fontsize='8'>DATA </run><run fontcolor='#9A8F78' fontname='Tableau Book' fontsize='8'>VGChartz via Kaggle (CC0), 16,187 titles, 1980-2016. Physical retail units only, so digital sales and recent years are undercounted.</run><run>Æ&#10;</run><run bold='true' fontcolor='#D4AF37' fontname='Tableau Bold' fontsize='8'>BUILT BY </run><run fontcolor='#9A8F78' fontname='Tableau Book' fontsize='8'>Elijah Villa  |  github.com/elijahvilla/video-game-sales-analytics</run></formatted-text><zone-style><format attr='background-color' value='#16130F' /><format attr='margin' value='6' /><format attr='padding' value='8' /></zone-style></zone></zone></zones>
+</dashboard>
+</dashboards>
+<windows><window class='worksheet' name='Market Over Time'><cards><edge name='left'><strip size='160'><card type='pages' /><card type='filters' /><card type='marks' /></strip></edge><edge name='top'><strip size='2147483647'><card type='columns' /></strip><strip size='2147483647'><card type='rows' /></strip><strip size='31'><card type='title' /></strip></edge></cards></window><window class='worksheet' name='Regional Mix'><cards><edge name='left'><strip size='160'><card type='pages' /><card type='filters' /><card type='marks' /></strip></edge><edge name='top'><strip size='2147483647'><card type='columns' /></strip><strip size='2147483647'><card type='rows' /></strip><strip size='31'><card type='title' /></strip></edge></cards></window><window class='worksheet' name='Platform Lifecycles'><cards><edge name='left'><strip size='160'><card type='pages' /><card type='filters' /><card type='marks' /></strip></edge><edge name='top'><strip size='2147483647'><card type='columns' /></strip><strip size='2147483647'><card type='rows' /></strip><strip size='31'><card type='title' /></strip></edge></cards></window><window class='worksheet' name='Top Publishers'><cards><edge name='left'><strip size='160'><card type='pages' /><card type='filters' /><card type='marks' /></strip></edge><edge name='top'><strip size='2147483647'><card type='columns' /></strip><strip size='2147483647'><card type='rows' /></strip><strip size='31'><card type='title' /></strip></edge></cards></window><window class='dashboard' maximized='true' name='Video Game Sales 1980-2016'><viewpoints><viewpoint name='Market Over Time'><zoom type='entire-view' /></viewpoint><viewpoint name='Regional Mix'><zoom type='entire-view' /></viewpoint><viewpoint name='Platform Lifecycles'><zoom type='entire-view' /></viewpoint><viewpoint name='Top Publishers'><zoom type='entire-view' /></viewpoint></viewpoints><active id='-1' /><device-preview /></window></windows>
+</workbook>
